@@ -1,0 +1,20 @@
+{
+  "name": "tor-request",
+  "version": "1.0.0",
+  "description": "send https requests through Tor.",
+  "main": "index.js",
+  "dependencies": {
+    "request": "^2.67.0",
+    "socks": "^1.1.8"
+  },
+  "devDependencies": {
+    "chalk": "^1.1.1",
+    "mocha": "^2.3.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "hannyajin",
+  "email": "talmo.christian@gmail.com",
+  "license": "ISC"
+}
