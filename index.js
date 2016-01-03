@@ -59,7 +59,7 @@ function torRequest (url, done) {
     opts.agent = opts.agent || createAgent();
   }
 
-  libs.request(opts, function (err, res, body) {
+  return libs.request(opts, function (err, res, body) {
     // Connection header by default is keep-alive,
     // we have to manually end the socket
     var agent = opts.agent;
