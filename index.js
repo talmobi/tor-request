@@ -29,13 +29,15 @@ var default_proxy_settings = createProxySettings("localhost", 9050);
 
 /* helper function to create a SOCKS agent to be used in the request library
  * */
-function createAgent (ipaddress, port, type) {
-  var proxy_setup = createProxySettings(ipaddress, port, type);
+function createAgent (url) {
+  var proxy_setup = createProxySettings();
+
+  var isHttps = url.indexOf('https://') >= 0;
 
   var socksAgent = new libs.Socks.Agent({
       proxy: proxy_setup,
     },
-    true, // https
+    isHttps, // https
     false // rejectUnauthorized option passed to tls.connect().
   );
 
@@ -52,11 +54,11 @@ function torRequest (url, done) {
     opts = {
       url: url,
       method: 'GET', // default 
-      agent: createAgent()
+      agent: createAgent(url)
     };
   } else {
     opts = url;
-    opts.agent = opts.agent || createAgent();
+    opts.agent = opts.agent || createAgent(opts.url);
   }
 
   return libs.request(opts, function (err, res, body) {

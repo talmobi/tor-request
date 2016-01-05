@@ -8,7 +8,6 @@
     "socks": "^1.1.8"
   },
   "devDependencies": {
-    "chalk": "^1.1.1",
     "mocha": "^2.3.4"
   },
   "scripts": {
@@ -16,5 +15,5 @@
   },
   "author": "hannyajin",
   "email": "talmo.christian@gmail.com",
-  "license": "ISC"
+  "license": "MIT"
 }
