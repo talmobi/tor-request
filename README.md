@@ -9,6 +9,8 @@ tr.request('https://api.ipify.org', function (err, res, body) {
   }
 });
 ```
+## Demo
+[http://tor.jin.fi/](http://tor.jin.fi/)
 
 ## About
 A very simple and light wrapper around the fantastic [request](https://github.com/request/request) library to send requests through Tor. This is done by feeding configured SocksAgent to the request options.
@@ -34,6 +36,9 @@ tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
 // index.js
 module.exports = {
   /**
+   * This is a simple wrapper function around the request library - use it exactly as you would use
+   * the request library.
+   *
    * See [request](https://github.com/request/request)
    * url: https://github.com/request/request
    */
