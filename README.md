@@ -31,13 +31,26 @@ tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
 ## API
 
 ```js
+// index.js
 module.exports = {
-  request: function () // see [request](https://github.com/request/request)
+  /**
+   * See [request](https://github.com/request/request)
+   * url: https://github.com/request/request
+   */
+  request: function (err, res, body)
   
-  setTorAddress: function (ipaddress:String, port:Number) // defaults to localhost, 9050
+  /**
+   * @param {string} ipaddress - ip address of tor server (if running locally it's 127.0.0.1 i.e. localhost)
+   * @param {number} port - port of the tor server (by default tor runs on port 9050)
+   */
+  setTorAddress: function (ipaddress, port) // defaults to localhost, 9050
   // If you run your Tor on a different port or you want to connect to a publicly avilable remote Tor server.
   
-  newTorSession: function () // clears and renews the Tor session (i.e., you get a new IP)
+  /**
+   * @param {function} done - the callback function to tell you when the process is done
+   * @param {object} err - null if tor session renewed successfully
+   */
+  newTorSession: function ( done(err) ) // clears and renews the Tor session (i.e., you get a new IP)
   // NOTE: This is usually rate limited - so use wisely.
   // NOTE2: This is done by signaling the Tor service by on the control port (9051 by default).
   // This is done by executing a child process in node using echo and nc (net-cat). You need
