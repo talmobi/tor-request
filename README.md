@@ -13,18 +13,32 @@ tr.request('https://api.ipify.org', function (err, res, body) {
 [http://tor.jin.fi/](http://tor.jin.fi/)
 
 ## About
-A very simple and light wrapper around the fantastic [request](https://github.com/request/request) library to send requests through Tor. This is done by feeding configured SocksAgent to the request options.
+A very simple and light wrapper around the fantastic [request](https://github.com/request/request) library to send requests through Tor.
+
+## How
+Creates and configures appropriate Agent objects for the Node's http and https core libraries.
 
 ## Requirements
-tor-request by default uses the Tor service running on your system (localhost). By default Tor runs on port 9050 (localhost of course). See [TorProject.org](https://www.torproject.org/docs/debian.html.en) for details.
+A Tor client.
 
-On Debian you can install and run a relatively up to date Tor with
+Either run it yourself (apt-get install tor) or a remote one. Defaults to localhost on port 9050 (Tor's default port).
+
+See [TorProject.org](https://www.torproject.org/docs/debian.html.en) for details and install guide for different systems.
+
+On Debian you can install and run a relatively up to date Tor with.
 
 ```bash
-apt-get install tor
+apt-get install tor # should auto run as daemon after install
 ```
 
-You need to have Tor installed on your system or set the ip address and port of a public Tor server by running the command.
+On OSX you can install with homebrew
+
+```bash
+brew install tor
+tor & # run as background process
+```
+
+Configure the Tor address before making requests (or use the default).
 
 ```js
 tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
@@ -36,16 +50,16 @@ tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
 // index.js
 module.exports = {
   /**
-   * This is a simple wrapper function around the request library - use it exactly as you would use
-   * the request library.
+   * This is a simple wrapper function around the request library's request function.
+   * Use it as you would use the request library. (see their superb documentation)
    *
    * See [request](https://github.com/request/request)
    * url: https://github.com/request/request
    */
-  request: function (err, res, body)
+  request: function (url || opts, function (err, res, body))
   
   /**
-   * @param {string} ipaddress - ip address of tor server (if running locally it's 127.0.0.1 i.e. localhost)
+   * @param {string} ipaddress - ip address of tor server (localhost by default)
    * @param {number} port - port of the tor server (by default tor runs on port 9050)
    */
   setTorAddress: function (ipaddress, port) // defaults to localhost, 9050
@@ -62,20 +76,20 @@ module.exports = {
   // to have enabled the control port and set up a tor password. This can all be done by editing two lines
   // of code in your /etc/tor/torrc file.
   // First uncomment the line "#ControlPort 9051"
-  // Then generate a hash password by running the command "tor --hash-password ''". Now replace the old password
+  // Then generate a hash password by running the command "tor --hash-password '' | tail -n". Now replace the old password
   // on the line "HashedControlPassword 16:D14CC.......FAD2" with your new password.
+  // This will allow you to access/modify/communicate with your tor client through a local port.
+  // We will use this port and send a command with echo and nc (apt-get install netcat) to signal
+  // a request for a new tor session. Alternatively you can kill and restart the process which will also
+  // get you a new tor session (and ip).
   // Rememeber to restart Tor with "service tor restart"
 }
 ```
 
 ## Test
 
-This tests by running 3 requests to api.ipify.org which returns your ip address in the response body.
-The first one is a vanilla request that should give you your normal public IP.
-The second if a request through Tor.
-The third is another request through Tor after a renewed Tor Session.
-All three requests should console.log different IP:s. If not, the test fails.
+Tests the original request library by connecting to http://api.ipify.org - returning your ip. Then makes a few additional requests, now through tor-request, and makes sure the ip's are different (went through tor).
 
 ```js
-node test/test.js
+mocha test/test.js
 ```
