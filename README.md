@@ -87,7 +87,7 @@ module.exports = {
   // to have enabled the control port and set up a tor password. This can all be done by editing two lines
   // of code in your /etc/tor/torrc file.
   // First uncomment the line "#ControlPort 9051"
-  // Then generate a hash password by running the command "tor --hash-password '' | tail -n". Now replace the old password
+  // Then generate a hash password by running the command "tor --hash-password '' | tail -n 1". Now replace the old password
   // on the line "HashedControlPassword 16:D14CC.......FAD2" with your new password.
   // This will allow you to access/modify/communicate with your tor client through a local port.
   // We will use this port and send a command with echo and nc (apt-get install netcat) to signal
