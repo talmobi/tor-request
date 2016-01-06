@@ -13,10 +13,21 @@ tr.request('https://api.ipify.org', function (err, res, body) {
 [http://tor.jin.fi/](http://tor.jin.fi/)
 
 ## About
-A very simple and light wrapper around the fantastic [request](https://github.com/request/request) library to send requests through Tor.
+A very simple and light wrapper around the fantastic [request](https://github.com/request/request) library to send http(s) requests through Tor.
 
 ## How
-Creates and configures appropriate Agent objects for the Node's http and https core libraries.
+Tor communicates through the SOCKS Protocol so we need to create and configure appropriate SOCKS Agent objects for Node's http and https core libraries using the [socks library](https://github.com/JoshGlazebrook/socks).
+
+## Installation
+
+from npm
+```js
+npm install tor-request
+```
+from source
+```js
+git clone https://github.com/hannyajin/tor-request && cd tor-request && npm install && mocha test/test.js
+```
 
 ## Requirements
 A Tor client.
@@ -93,3 +104,6 @@ Tests the original request library by connecting to http://api.ipify.org - retur
 ```js
 mocha test/test.js
 ```
+
+## LICENSE
+MIT
