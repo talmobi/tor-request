@@ -74,66 +74,67 @@ function torRequest (url, done) {
 };
 
 
-/*
- * Used to signal the Tor process, listening on contrl port 9051
- * by default, by running a child process. Constructing the signal
- * using echo and sending it to the control port by
- * piping it through net-cat (nc).
- * */
-var exec = require('child_process').exec;
+var net = require('net'); // to communicate with the Tor clients ControlPort
+var os = require('os'); // for os EOL character
 
-/*
- * Requires net-cat to be installed (debian guide: apt-get install net-cat)
- *
- * Sends a NEWNYM SIGNAL to Tor through the ControlPort.
- * Essentially getting a clean new tor session (and IP).
- *
- * NOTE: This is usually rate limited so use wisely!!
- *
- * You need to enabled the tor ControlPort:9051
- * and set a tor hash password by editing the /etc/tor/torrc file.
- *
- * Basic Guide:
- *  - ControlPort
- *      This will make Tor listen at a specified port so that we
- *      can send signals to it in order to manage it
- *      (such as shutdown, restart etc).
- *
- *      Enable the control port by uncommenting the line. 
- *
- *      #ControlPort 9051
- *
- *      inside /etc/tor/torrc
- *
- *  - set tor hash password
- *      first run
- *
- *      tor --hash-password ''
- *
- *      in the terminal. This outputs a hashpassword something like
- *
- *      16:D14CC89AD7848B8C60093105E8284A2D3AB2CF3C20D95FECA0848CFAD2
- *   
- *      now inside /etc/tor/torrc update the line
- *
- *      HashedControlPassword 16:D14CC89AD7848B8C60093105E8284A2D3AB2CF3C20D95FECA0848CFAD2
- *
- *      with your newly generated hash password. Then restart Tor
- *
- *      service tor restart
- * */
+// helper object for communicating with the Tor ControlPort.
+// With the ControlPort we can request the Tor Client to renew out sessoin (get new ip)
+var TorControlPort = {
+  send: function send (commands, done) {
+    var socket = net.connect({
+      host: 'localhost',
+      port: 9051 // default Tor ControlPort
+    }, function () {
+      //console.log('connected to ControlPort!');
+
+      // send new tor session request signal
+      //echo authenticate ""; echo signal newnym; echo quit | nc localhost 9051';
+      var commandString = commands.join('\n') + '\n';
+      socket.write( commandString );
+    });
+
+    socket.on('error', function (err) {
+      done(err || 'ControlPort communication error');
+    });
+
+    var data = "";
+    socket.on('data', function (chunk) {
+      data += chunk.toString();
+    });
+
+    socket.on('end', function () {
+      //console.log('disconncted from ControlPort');
+      done(null, data);
+    });
+  }
+};
+
 function renewTorSession (done) {
-  var commandString = '(echo authenticate ""; echo signal newnym; echo quit) | nc localhost 9051';
-  var child = exec( commandString
-      , function (err, stdout, stderr) {
-        if (err) {
-          done(err);
-        } else {
-          done(null, "Success!");
-        }
-      });
-}
+  var commands = [
+    'authenticate ""', // authenticate the connection
+    'signal newnym', // send the signal (renew Tor session)
+    'quit' // close the connection
+  ];
 
+  TorControlPort.send(commands, function (err, data) {
+    if (err) {
+      done(err);
+    } else {
+      var lines = data.split( require('os').EOL ).slice(0, -1);
+
+      var success = lines.every(function (val, ind, arr) {
+        // each response from the ControlPort should start with 250 (OK STATUS)
+        return val.length <= 0 || val.indexOf('250') >= 0;
+      });
+
+      if (!success) {
+        done( new Error('Error communicating with Tor ControlPort\n' + data) );
+      } else {
+        done(null, "Tor session successfully renewed!!");
+      }
+    }
+  });
+}
 
 module.exports = {
   setTorAddress: function (ipaddress, port) {
@@ -143,9 +144,9 @@ module.exports = {
 
   request: torRequest,
   torRequest: torRequest,
-  proxyRequest: torRequest,
 
-  getNewIP: renewTorSession,
   newTorSession: renewTorSession,
   renewTorSession: renewTorSession,
+
+  TorControlPort: TorControlPort
 };

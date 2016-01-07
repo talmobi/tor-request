@@ -7,7 +7,7 @@ var url = "http://api.ipify.org"; // this api returns your ip in the respnose bo
 var httpsUrl = "https://api.ipify.org";
 
 describe('Testing request and tor-request against ' + url, function () {
-  this.timeout(6000);
+  this.timeout(9000);
   var public_ip = "";
   var tor_ip = "";
 
@@ -57,7 +57,7 @@ describe('Testing request and tor-request against ' + url, function () {
     it('should return without error', function (done) {
       tr.request(url, function (err, res, body) {
         // api.ipify.org returns your ip in the response body
-        if (err || body == tor_ip) throw err;
+        if (err || body == tor_ip) throw err || new Error('ip has not changed after new tor session was requested.');
         console.log("The requests public ip was: " + body + " (last was: "+ tor_ip +")");
         tor_ip = body;
         done();
