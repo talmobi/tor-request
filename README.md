@@ -82,18 +82,14 @@ module.exports = {
    */
   newTorSession: function ( done(err) ) // clears and renews the Tor session (i.e., you get a new IP)
   // NOTE: This is usually rate limited - so use wisely.
-  // NOTE2: This is done by signaling the Tor service by on the control port (9051 by default).
-  // This is done by executing a child process in node using echo and nc (net-cat). You need
-  // to have enabled the control port and set up a tor password. This can all be done by editing two lines
-  // of code in your /etc/tor/torrc file.
-  // First uncomment the line "#ControlPort 9051"
-  // Then generate a hash password by running the command "tor --hash-password '' | tail -n 1". Now replace the old password
-  // on the line "HashedControlPassword 16:D14CC.......FAD2" with your new password.
-  // This will allow you to access/modify/communicate with your tor client through a local port.
-  // We will use this port and send a command with echo and nc (apt-get install netcat) to signal
-  // a request for a new tor session. Alternatively you can kill and restart the process which will also
-  // get you a new tor session (and ip).
-  // Rememeber to restart Tor with "service tor restart"
+  // NOTE2: This is done by communicating with the Tor Client at the Tor ControlPort (default: localhost:9051)
+  // The ControlPort is disabled by default -> enable it by uncommenting the line "#ControlPort 9051" in
+  // your /etc/tor/torrc file.
+  //
+  // In order to gain access to the control port you need to set its password. Update the line
+  // "HashControlPassword 16:D14CC... " in your /etc/tor/torrc file with the password you get by running
+  // "tor --hash-password '' | tail -n 1". Finally remember to restart tor to enable the changes.
+  // "service tor restart"
 }
 ```
 
