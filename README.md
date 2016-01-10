@@ -26,15 +26,17 @@ npm install tor-request
 ```
 from source
 ```js
-git clone https://github.com/hannyajin/tor-request && cd tor-request && npm install && mocha test/test.js
+git clone https://github.com/finnpaws/tor-request
+cd tor-request
+npm install
 ```
 
 ## Requirements
 A Tor client.
 
-Either run it yourself (apt-get install tor) or a remote one. Defaults to localhost on port 9050 (Tor's default port).
+Either run it yourself locally (recommended) or specify the address for a publically available one.
 
-See [TorProject.org](https://www.torproject.org/docs/debian.html.en) for details and install guide for different systems.
+Tor is available for a multitude of systems.
 
 On Debian you can install and run a relatively up to date Tor with.
 
@@ -49,7 +51,10 @@ brew install tor
 tor & # run as background process
 ```
 
-Configure the Tor address before making requests (or use the default).
+See [TorProject.org](https://www.torproject.org/docs/debian.html.en) for detailed installation guides for all platforms.
+
+
+The Tor client by default runs on port 9050 (localhost of course). This is also the default address tor-request uses. You can change it if needed.
 
 ```js
 tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
@@ -61,11 +66,11 @@ tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
 // index.js
 module.exports = {
   /**
-   * This is a simple wrapper function around the request library's request function.
-   * Use it as you would use the request library. (see their superb documentation)
+   * This is a light wrapper function around the famous request nodeJS library, routing it through
+   * your Tor client.
    *
-   * See [request](https://github.com/request/request)
-   * url: https://github.com/request/request
+   * Use it as you would use the request library - see their superb documentation.
+   * https://github.com/request/request
    */
   request: function (url || opts, function (err, res, body))
   
@@ -73,8 +78,7 @@ module.exports = {
    * @param {string} ipaddress - ip address of tor server (localhost by default)
    * @param {number} port - port of the tor server (by default tor runs on port 9050)
    */
-  setTorAddress: function (ipaddress, port) // defaults to localhost, 9050
-  // If you run your Tor on a different port or you want to connect to a publicly avilable remote Tor server.
+  setTorAddress: function (ipaddress, port) // defaults to localhost on port 9050
   
   /**
    * @param {function} done - the callback function to tell you when the process is done
