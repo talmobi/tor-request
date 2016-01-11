@@ -26,7 +26,7 @@ npm install tor-request
 ```
 from source
 ```js
-git clone https://github.com/finnpaws/tor-request
+git clone https://github.com/tallykong/tor-request
 cd tor-request
 npm install
 ```
