@@ -4,7 +4,7 @@ var libs = {
 
   // better HTTP for nodejs
   request: require('request'),
-};
+}
 
 /* Run tor locally (debian example: apt-get install tor)
  * default tor ip address: localhost
@@ -21,7 +21,7 @@ function createProxySettings (ipaddress, port, type) {
     type: type || dps.type || 5,
   };
   return proxy_setup;
-};
+}
 
 // set default proxy settings
 var default_proxy_settings = createProxySettings("localhost", 9050);
@@ -41,36 +41,44 @@ function createAgent (url) {
   );
 
   return socksAgent;
-};
+}
 
 /* wraps around libs.request and attaches a SOCKS Agent into
  * the request.
  * */
-function torRequest (url, done) {
-  var opts = {};
+function torRequest (uri, options, callback) {
+  var params = libs.request.initParams(uri, options, callback);
+  params.agent = createAgent( params.uri );
 
-  if (typeof url === 'string') {
-    opts = {
-      url: url,
-      method: 'GET', // default 
-      agent: createAgent(url)
-    };
-  } else {
-    opts = url;
-    opts.agent = opts.agent || createAgent(opts.url);
-  }
-
-  return libs.request(opts, function (err, res, body) {
+  return libs.request(params, function (err, res, body) {
     // Connection header by default is keep-alive,
     // we have to manually end the socket
-    var agent = opts.agent;
+    var agent = options.agent;
     if (agent && agent.encryptedSocket) {
       agent.encryptedSocket.end();
     }
 
-    done(err, res, body);
+    params.callback(err, res, body);
   });
-};
+}
+
+// bind http through tor-request instead of request
+function verbFunc (verb) {
+  var method = verb === 'del' ? 'DELETE' : verb.toUpperCase();
+  return function (uri, options, callback) {
+    var params = libs.request.initParams(uri, options, callback);
+    params.method = method;
+    return torRequest(params, params.callback);
+  }
+}
+
+// create bindings through tor-request for http
+torRequest.get = verbFunc('get')
+torRequest.head = verbFunc('head')
+torRequest.post = verbFunc('post')
+torRequest.put = verbFunc('put')
+torRequest.patch = verbFunc('patch')
+torRequest.del = verbFunc('del')
 
 
 var net = require('net'); // to communicate with the Tor clients ControlPort
@@ -114,7 +122,7 @@ var TorControlPort = {
       done(null, data);
     });
   }
-};
+}
 
 /**
  * send a predefined set of commands to the ControlPort
@@ -161,4 +169,4 @@ module.exports = {
   renewTorSession: renewTorSession,
 
   TorControlPort: TorControlPort
-};
+}
