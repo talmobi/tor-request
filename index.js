@@ -53,7 +53,7 @@ function torRequest (uri, options, callback) {
   return libs.request(params, function (err, res, body) {
     // Connection header by default is keep-alive,
     // we have to manually end the socket
-    var agent = options.agent;
+    var agent = params.agent;
     if (agent && agent.encryptedSocket) {
       agent.encryptedSocket.end();
     }

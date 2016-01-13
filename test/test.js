@@ -6,9 +6,6 @@ var chalk = require('chalk');
 var url = "http://api.ipify.org"; // this api returns your ip in the respnose body
 var httpsUrl = "https://api.ipify.org";
 
-var google = "http://google.com";
-var google = url;
-
 describe('Testing request and tor-request against ' + url, function () {
   this.timeout(15000);
   var public_ip = "";
