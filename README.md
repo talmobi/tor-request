@@ -26,15 +26,17 @@ npm install tor-request
 ```
 from source
 ```js
-git clone https://github.com/hannyajin/tor-request && cd tor-request && npm install && mocha test/test.js
+git clone https://github.com/talmobi/tor-request
+cd tor-request
+npm install
 ```
 
 ## Requirements
 A Tor client.
 
-Either run it yourself (apt-get install tor) or a remote one. Defaults to localhost on port 9050 (Tor's default port).
+Either run it yourself locally (recommended) or specify the address for a publically available one.
 
-See [TorProject.org](https://www.torproject.org/docs/debian.html.en) for details and install guide for different systems.
+Tor is available for a multitude of systems.
 
 On Debian you can install and run a relatively up to date Tor with.
 
@@ -49,7 +51,10 @@ brew install tor
 tor & # run as background process
 ```
 
-Configure the Tor address before making requests (or use the default).
+See [TorProject.org](https://www.torproject.org/docs/debian.html.en) for detailed installation guides for all platforms.
+
+
+The Tor client by default runs on port 9050 (localhost of course). This is also the default address tor-request uses. You can change it if needed.
 
 ```js
 tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
@@ -61,11 +66,11 @@ tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
 // index.js
 module.exports = {
   /**
-   * This is a simple wrapper function around the request library's request function.
-   * Use it as you would use the request library. (see their superb documentation)
+   * This is a light wrapper function around the famous request nodeJS library, routing it through
+   * your Tor client.
    *
-   * See [request](https://github.com/request/request)
-   * url: https://github.com/request/request
+   * Use it as you would use the request library - see their superb documentation.
+   * https://github.com/request/request
    */
   request: function (url || opts, function (err, res, body))
   
@@ -73,8 +78,7 @@ module.exports = {
    * @param {string} ipaddress - ip address of tor server (localhost by default)
    * @param {number} port - port of the tor server (by default tor runs on port 9050)
    */
-  setTorAddress: function (ipaddress, port) // defaults to localhost, 9050
-  // If you run your Tor on a different port or you want to connect to a publicly avilable remote Tor server.
+  setTorAddress: function (ipaddress, port) // defaults to localhost on port 9050
   
   /**
    * @param {function} done - the callback function to tell you when the process is done
@@ -82,18 +86,14 @@ module.exports = {
    */
   newTorSession: function ( done(err) ) // clears and renews the Tor session (i.e., you get a new IP)
   // NOTE: This is usually rate limited - so use wisely.
-  // NOTE2: This is done by signaling the Tor service by on the control port (9051 by default).
-  // This is done by executing a child process in node using echo and nc (net-cat). You need
-  // to have enabled the control port and set up a tor password. This can all be done by editing two lines
-  // of code in your /etc/tor/torrc file.
-  // First uncomment the line "#ControlPort 9051"
-  // Then generate a hash password by running the command "tor --hash-password '' | tail -n 1". Now replace the old password
-  // on the line "HashedControlPassword 16:D14CC.......FAD2" with your new password.
-  // This will allow you to access/modify/communicate with your tor client through a local port.
-  // We will use this port and send a command with echo and nc (apt-get install netcat) to signal
-  // a request for a new tor session. Alternatively you can kill and restart the process which will also
-  // get you a new tor session (and ip).
-  // Rememeber to restart Tor with "service tor restart"
+  // NOTE2: This is done by communicating with the Tor Client at the Tor ControlPort (default: localhost:9051)
+  // The ControlPort is disabled by default -> enable it by uncommenting the line "#ControlPort 9051" in
+  // your /etc/tor/torrc file.
+  //
+  // In order to gain access to the control port you need to set its password. Update the line
+  // "HashControlPassword 16:D14CC... " in your /etc/tor/torrc file with the password you get by running
+  // "tor --hash-password '' | tail -n 1". Finally remember to restart tor to enable the changes.
+  // "service tor restart"
 }
 ```
 
