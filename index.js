@@ -2,8 +2,7 @@ var libs = {
   // communicate with SOCKS (protocol used by tor) over nodejs
   Socks: require('socks'),
 
-  // simplified http client for nodejs
-  // (automatically follows 302 MOVED etc)
+  // better HTTP for nodejs
   request: require('request'),
 };
 
@@ -78,17 +77,25 @@ var net = require('net'); // to communicate with the Tor clients ControlPort
 var os = require('os'); // for os EOL character
 
 // helper object for communicating with the Tor ControlPort.
-// With the ControlPort we can request the Tor Client to renew out sessoin (get new ip)
+// With the ControlPort we can request the Tor Client to renew out session (get new ip)
+// Make sure to enable the tor ControlPort and set a password for authentication by
+// running "tor --hash-password YOUR_PASSWORD_HERE"
+// altogether editing two lines in your /etc/tor/torrc file.
 var TorControlPort = {
+  password: "", // password for ControlPort
+  host: 'localhost',
+  port: 9051,
+
+  /**
+   * @param {Array.<string>} commands - array of commands to send to the ControlPort
+   * @param {function} done - callback function (err, data). err is null on success.
+   * */
   send: function send (commands, done) {
     var socket = net.connect({
-      host: 'localhost',
-      port: 9051 // default Tor ControlPort
+      host: TorControlPort.host || 'localhost',
+      port: TorControlPort.port || 9051 // default Tor ControlPort
     }, function () {
       //console.log('connected to ControlPort!');
-
-      // send new tor session request signal
-      //echo authenticate ""; echo signal newnym; echo quit | nc localhost 9051';
       var commandString = commands.join('\n') + '\n';
       socket.write( commandString );
     });
@@ -109,9 +116,14 @@ var TorControlPort = {
   }
 };
 
+/**
+ * send a predefined set of commands to the ControlPort
+ * to request a new tor session.
+ */
 function renewTorSession (done) {
+  var password = TorControlPort.password || "";
   var commands = [
-    'authenticate ""', // authenticate the connection
+    'authenticate '+ password +'', // authenticate the connection
     'signal newnym', // send the signal (renew Tor session)
     'quit' // close the connection
   ];

@@ -13,7 +13,7 @@
   "scripts": {
     "test": "mocha test/*"
   },
-  "author": "hannyajin",
+  "author": "talmobi",
   "email": "talmo.christian@gmail.com",
   "license": "MIT"
 }

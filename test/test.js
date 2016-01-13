@@ -7,7 +7,7 @@ var url = "http://api.ipify.org"; // this api returns your ip in the respnose bo
 var httpsUrl = "https://api.ipify.org";
 
 describe('Testing request and tor-request against ' + url, function () {
-  this.timeout(9000);
+  this.timeout(15000);
   var public_ip = "";
   var tor_ip = "";
 
