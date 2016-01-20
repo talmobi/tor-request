@@ -1,8 +1,6 @@
 var tr = require('../index.js');
 var request = require('request');
 
-var chalk = require('chalk');
-
 var url = "http://api.ipify.org"; // this api returns your ip in the respnose body
 var httpsUrl = "https://api.ipify.org";
 
