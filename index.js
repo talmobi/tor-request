@@ -48,7 +48,7 @@ function createAgent (url) {
  * */
 function torRequest (uri, options, callback) {
   var params = libs.request.initParams(uri, options, callback);
-  params.agent = createAgent( params.uri );
+  params.agent = createAgent( params.uri || params.url );
 
   return libs.request(params, function (err, res, body) {
     // Connection header by default is keep-alive,
