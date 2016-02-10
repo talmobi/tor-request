@@ -38,17 +38,23 @@ Either run it yourself locally (recommended) or specify the address for a public
 
 Tor is available for a multitude of systems.
 
-On Debian you can install and run a relatively up to date Tor with.
+On **Debian** you can install and run a relatively up to date Tor with.
 
 ```bash
 apt-get install tor # should auto run as daemon after install
 ```
 
-On OSX you can install with homebrew
+On **OSX** you can install with homebrew
 
 ```bash
 brew install tor
 tor & # run as background process
+```
+
+On **Windows** download the tor expert bundle (not the browser), unzip it and run tor.exe.
+
+```bash
+./Tor/tor.exe # --default-torrc PATH_TO_TORRC
 ```
 
 See [TorProject.org](https://www.torproject.org/docs/debian.html.en) for detailed installation guides for all platforms.
@@ -58,6 +64,16 @@ The Tor client by default runs on port 9050 (localhost of course). This is also 
 
 ```js
 tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
+```
+
+## (Optional) Configuring Tor, enabling the ControlPort
+Configure tor by editing the torrc file usually located at /etc/tor/torrc or /lib/etc/tor/torrc or ~/.torrc - Alternatively you can supply the path yourself with the **--default-torrc PATH** command line argument. See [Tor Command-Line Options](https://www.torproject.org/docs/tor-manual.html.en)
+
+```bash
+# sample torrc file
+#ControlPort 9051 # uncomment to enable control port, allowing all localhost connections to send signals and modify tor
+#HashedControlPassword HASHED_PASSWORD # uncomment to require password authentication for control port access
+# Generate a hashed control password with the --hash-password command line argument: "tor --hash-password PASSWORD | tail -n 1"
 ```
 
 ## API
@@ -81,19 +97,27 @@ module.exports = {
   setTorAddress: function (ipaddress, port) // defaults to localhost on port 9050
   
   /**
+   * Helper object to communicate with the tor ControlPort. Requires an enabled ControlPort on tor.
+   */
+  TorControlPort: {
+    password: "", // default ControlPort password
+    host: "localhost", // default address
+    port: 9051, // default ControlPort
+    
+    /**
+     * @param {Array.string} commands - signals that are sent to the ControlPort
+     */
+    send: function (commands, done(err, data))
+  }
+  
+  /**
+   * A set of predefined TorControlPort commands to request and verify tor for a new session (get a new ip to use).
+   *
    * @param {function} done - the callback function to tell you when the process is done
    * @param {object} err - null if tor session renewed successfully
    */
   newTorSession: function ( done(err) ) // clears and renews the Tor session (i.e., you get a new IP)
-  // NOTE: This is usually rate limited - so use wisely.
-  // NOTE2: This is done by communicating with the Tor Client at the Tor ControlPort (default: localhost:9051)
-  // The ControlPort is disabled by default -> enable it by uncommenting the line "#ControlPort 9051" in
-  // your /etc/tor/torrc file.
-  //
-  // In order to gain access to the control port you need to set its password. Update the line
-  // "HashControlPassword 16:D14CC... " in your /etc/tor/torrc file with the password you get by running
-  // "tor --hash-password '' | tail -n 1". Finally remember to restart tor to enable the changes.
-  // "service tor restart"
+  
 }
 ```
 
