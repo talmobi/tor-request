@@ -1,5 +1,9 @@
 # tor-request - Simple HTTP client through Tor network
 
+[![npm](https://img.shields.io/npm/v/tor-request.svg?maxAge=2592000)](https://www.npmjs.com/package/tor-request)
+[![npm](https://img.shields.io/npm/dm/tor-request.svg?maxAge=2592000)](https://www.npmjs.com/package/tor-request)
+[![npm](https://img.shields.io/npm/l/tor-request.svg?maxAge=2592000)](https://www.npmjs.com/package/tor-request)
+
 ## Simple to use
 ```js
 var tr = require('tor-request');
