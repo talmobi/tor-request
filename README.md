@@ -67,6 +67,8 @@ tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
 ```
 
 ## (Optional) Configuring Tor, enabling the ControlPort
+You need to enable the Tor ControlPort if you want to programmatically refresh the Tor session (i.e., get a new proxy IP address) without restarting your Tor client.
+
 Configure tor by editing the torrc file usually located at /etc/tor/torrc or /lib/etc/tor/torrc or ~/.torrc - Alternatively you can supply the path yourself with the **--default-torrc PATH** command line argument. See [Tor Command-Line Options](https://www.torproject.org/docs/tor-manual.html.en)
 
 ```bash
