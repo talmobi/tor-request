@@ -73,13 +73,32 @@ tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
 ## (Optional) Configuring Tor, enabling the ControlPort
 You need to enable the Tor ControlPort if you want to programmatically refresh the Tor session (i.e., get a new proxy IP address) without restarting your Tor client.
 
-Configure tor by editing the torrc file usually located at /etc/tor/torrc or /lib/etc/tor/torrc or ~/.torrc - Alternatively you can supply the path yourself with the **--default-torrc PATH** command line argument. See [Tor Command-Line Options](https://www.torproject.org/docs/tor-manual.html.en)
+Configure tor by editing the torrc file usually located at **/etc/tor/torrc**, **/lib/etc/tor/torrc**, **~/.torrc** or **/usr/local/etc/tor/torrc** - Alternatively you can supply the path yourself with the **--default-torrc PATH** command line argument. See [Tor Command-Line Options](https://www.torproject.org/docs/tor-manual.html.en)
+
+Generate the hash password for the torrc file by running **tor --hash-password SECRETPASSWORD**.
 
 ```bash
+tor --hash-password giraffe
+```
+
+The last line of the output contains the hash password that you copy paste into torrc
+```bash
+Jul 21 13:08:50.363 [notice] Tor v0.2.6.10 (git-58c51dc6087b0936) running on Darwin with Libevent 2.0.22-stable, OpenSSL 1.0.2h and Zlib 1.2.5.
+Jul 21 13:08:50.363 [notice] Tor can't help you if you use it wrong! Learn how to be safe at https://www.torproject.org/download/download#warning
+16:AEBC98A6777A318660659EC88648EF43EDACF4C20D564B20FF244E81DF
+```
+
+Copy the generated hash password and add it to your torrc file
+```bash
 # sample torrc file
-#ControlPort 9051 # uncomment to enable control port, allowing all localhost connections to send signals and modify tor
-#HashedControlPassword HASHED_PASSWORD # uncomment to require password authentication for control port access
-# Generate a hashed control password with the --hash-password command line argument: "tor --hash-password PASSWORD | tail -n 1"
+ControlPort 9051
+HashedControlPassword 16:AEBC98A6777A318660659EC88648EF43EDACF4C20D564B20FF244E81DF
+```
+
+Lastly tell tor-request the password to use
+```
+var tr = require('tor-request')
+tr.TorControlPort.password = 'giraffe'
 ```
 
 ## API
