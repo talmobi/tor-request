@@ -131,7 +131,7 @@ var TorControlPort = {
 function renewTorSession (done) {
   var password = TorControlPort.password || "";
   var commands = [
-    'authenticate '+ password +'', // authenticate the connection
+    'authenticate "' + password + '"', // authenticate the connection
     'signal newnym', // send the signal (renew Tor session)
     'quit' // close the connection
   ];
