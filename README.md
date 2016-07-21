@@ -96,7 +96,7 @@ HashedControlPassword 16:AEBC98A6777A318660659EC88648EF43EDACF4C20D564B20FF244E8
 ```
 
 Lastly tell tor-request the password to use
-```
+```js
 var tr = require('tor-request')
 tr.TorControlPort.password = 'giraffe'
 ```
