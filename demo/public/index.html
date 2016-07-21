@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Demo</title>
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+  <div>My IP: <span id='myip'></span></div>
+  <div>Server IP: <span id='serverip'></span></div>
+  <div>My TOR IP: <span id='mytorip'></span></div>
+  <hr>
+  <button id='button'>Request New Tor Session</button>
+
+  <script type="text/javascript">
+    function request (id, path) {
+      var req = new XMLHttpRequest()
+      req.open('GET', path, true)
+      req.onload = function () {
+        if (req.status >= 200 && req.status < 400) {
+          // success
+          document.getElementById(id).textContent = req.responseText
+        }
+      }
+      req.send()
+    }
+    request('myip', '/api/myip')
+    request('serverip', '/api/serverip')
+    request('mytorip', '/api/mytorip')
+
+    function requestNewTorSession (e) {
+      e.preventDefault()
+      var req = new XMLHttpRequest()
+      req.open('GET', '/api/requestNewTorSession', true)
+      req.onload = function () {
+        if (req.status >= 200 && req.status < 400) {
+          // success
+          setTimeout(function () {
+            location.reload()
+          }, 2000)
+        } else {
+          alert('request for ne tor session failed (limited uses to alleviate abuse)')
+        }
+      }
+      req.send()
+    }
+    document.getElementById('button').onclick = requestNewTorSession
+  </script>
+</body>
+</html>

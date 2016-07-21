@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "express": "^4.14.0",
+    "express-rate-limit": "^2.4.0",
+    "external-ip": "^0.2.4",
+    "request": "^2.73.0"
+  }
+}
