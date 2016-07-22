@@ -9,7 +9,8 @@ var ipservices = [
   'http://ifconfig.me/ip',
   'http://ifconfig.me',
   'https://api.ipify.org',
-  'http://ip.appspot.com'
+  'http://ip.appspot.com',
+  'http://ip-spot.com',
 ]
 
 function findExternalIp (request, done) {
@@ -35,14 +36,11 @@ function findExternalIp (request, done) {
 var limiter = require('express-rate-limit')({
   windowMs: 1000 * 60 * 15, // 15 min
   max: 200,
-  delayMs: 20
+  delayMs: 0
 })
 
-var renewLimiter = require('express-rate-limit')({
-  windowMs: 1000 * 60 * 15, // 15 min
-  max: 20,
-  delayMs: 3000
-})
+var renewTorSessionTimeout = 1000 * 30 // 30 second timeout on session renew
+var renewTorSessionTime = Date.now() - renewTorSessionTimeout
 
 app.use(limiter)
 app.use(express.static('public'))
@@ -68,12 +66,29 @@ app.get('/api/mytorip', function (req, res) {
   })
 })
 
-app.use(renewLimiter)
 app.get('/api/requestNewTorSession', function (req, res) {
-  tr.renewTorSession(function (err, success) {
-    if (err) return res.send('error - could not renew tor session')
-    res.send(success)
-  })
+  var now = Date.now()
+  var delta = now - renewTorSessionTime
+  if (delta > renewTorSessionTimeout) {
+    renewTorSessionTime = now
+
+    tr.renewTorSession(function (err, success) {
+      if (err) return res.status(500).send({
+        statusCode: 500,
+        message: 'error - could not renew tor session'
+      })
+      res.status(200).send({
+        statusCode: 200,
+        message: 'success'
+      })
+    })
+  } else {
+    var s = (delta / 1000) | 0
+    res.status(400).send({
+      statusCode: 400,
+      message: 'too frequest session renews, try again in ' + s + ' seconds'
+    })
+  }
 })
 
 var port = 3366
