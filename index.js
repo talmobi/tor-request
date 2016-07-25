@@ -1,4 +1,4 @@
-module.exports = new (function(){
+module.exports = function(){
   var libs = {
     // communicate with SOCKS (protocol used by tor) over nodejs
     Socks: require('socks'),
@@ -171,4 +171,4 @@ module.exports = new (function(){
   
     TorControlPort: TorControlPort
   }
-})
+}
