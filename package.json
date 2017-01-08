@@ -11,7 +11,9 @@
     "mocha": "^2.3.4"
   },
   "scripts": {
-    "test": "mocha test/*"
+    "test": "mocha test/test.js",
+    "test-all": "mocha test/*",
+    "test-control-port": "mocha test/test-control-port.js"
   },
   "author": "talmobi",
   "email": "talmo.christian@gmail.com",

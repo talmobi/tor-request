@@ -42,27 +42,6 @@ describe('Testing request and tor-request against ' + url, function () {
     });
   });
 
-  describe('request a new tor session with tr.newTorSession', function () {
-    it('should return without error', function (done) {
-      tr.newTorSession(function (err) {
-        if (err) throw err;
-        done();
-      });
-    });
-  });
-
-  describe('verify that we have a new tor session (new ip)', function () {
-    it('should return without error', function (done) {
-      tr.request(url, function (err, res, body) {
-        // api.ipify.org returns your ip in the response body
-        if (err || !tor_ip || body == tor_ip) throw err || new Error('ip has not changed after new tor session was requested.');
-        console.log("The requests public ip was: " + body + " (last was: "+ tor_ip +")");
-        tor_ip = body;
-        done();
-      });
-    });
-  });
-
   /**
    * Test http bindings between request and tor-request
    */

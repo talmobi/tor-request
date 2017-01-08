@@ -4,3 +4,4 @@ node_modules/
 hash_password
 
 demo/
+test/
