@@ -51,7 +51,7 @@ app.use(function (req, res, next) {
 })
 
 app.get('/api/myip', function (req, res) {
-  res.send(req.ip)
+  res.send(req.headers['x-forwarded-for'] || req.ip)
 })
 
 app.get('/api/serverip', function (req, res) {
