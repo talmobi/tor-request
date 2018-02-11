@@ -83,7 +83,10 @@ torRequest.del = verbFunc('del')
 torRequest.jar = libs.request.jar;
 torRequest.cookie = libs.request.cookie;
 torRequest.defaults = function () {
-	libs.request = libs.request.defaults.apply(libs.request, arguments);
+	let lib = require('request');
+	libs.request = lib.defaults.apply(lib, arguments);
+	libs.request.initParams = lib.initParams;
+	return torRequest;
 };
 
 var net = require('net'); // to communicate with the Tor clients ControlPort
