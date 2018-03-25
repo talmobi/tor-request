@@ -48,6 +48,13 @@ On **Debian** you can install and run a relatively up to date Tor with.
 apt-get install tor # should auto run as daemon after install
 ```
 
+**Misc Linux Command for running Tor as daemon**
+`--RunAsDaemon 0`
+**thanks @knoxcard**
+```
+/usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc -f /etc/tor/torrc --RunAsDaemon 0
+```
+
 On **OSX** you can install with homebrew
 
 ```bash
