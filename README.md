@@ -146,6 +146,17 @@ module.exports = {
 }
 ```
 
+## Custom headers
+https://github.com/talmobi/tor-request/issues/13
+
+Refer to the https://github.com/request/request#custom-http-headers to specify your own headers ( like User-Agent ).
+
+basically:
+
+```js
+tr.request({ url: 'google.com', headers: { 'user-agent': 'giraffe' }}, function ( err, response, body ) { /*...*/ })
+```
+
 ## Test
 
 Tests the original request library by connecting to http://api.ipify.org - returning your ip. Then makes a few additional requests, now through tor-request, and makes sure the ip's are different (went through tor).
