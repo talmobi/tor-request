@@ -1,4 +1,11 @@
 node_modules/
-*.swo
-*.swp
+
+# mac files
+*.DS_Store
+
+# vim files
+*.sw?
+
+# debug files
 hash_password
+dev.js
