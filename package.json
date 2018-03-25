@@ -8,9 +8,12 @@
     "socks-proxy-agent": "~3.0.1"
   },
   "devDependencies": {
-    "mocha": "~2.3.4"
+    "mocha": "~2.3.4",
+    "spacestandard": "~0.2.0"
   },
   "scripts": {
+    "lint": "spacestandard index.js",
+    "fixlint": "spacestandard --fix index.js",
     "test": "mocha test/test.js",
     "test-all": "npm run test-control-port && npm run test",
     "test-control-port": "mocha test/test-control-port.js"
