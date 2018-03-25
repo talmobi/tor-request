@@ -1,6 +1,6 @@
 {
   "name": "tor-request",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "send http/https requests through Tor.",
   "main": "index.js",
   "dependencies": {
