@@ -93,7 +93,6 @@ describe('Testing request and tor-request against ' + url, function () {
         tr.request.put(url, function (err, res, body) {
           console.log("method was: " + res.req.method);
           if (err || res.req.method != 'PUT') throw err || new Error("failed to call tr.request.put through tor");
-          console.log("the requests public ip was: " + body);
           done();
         });
       });
