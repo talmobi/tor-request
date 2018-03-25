@@ -80,6 +80,14 @@ torRequest.put = verbFunc('put')
 torRequest.patch = verbFunc('patch')
 torRequest.del = verbFunc('del')
 
+torRequest.jar = libs.request.jar;
+torRequest.cookie = libs.request.cookie;
+torRequest.defaults = function () {
+	let lib = require('request');
+	libs.request = lib.defaults.apply(lib, arguments);
+	libs.request.initParams = lib.initParams;
+	return torRequest;
+};
 
 var net = require('net'); // to communicate with the Tor clients ControlPort
 var os = require('os'); // for os EOL character
@@ -168,5 +176,5 @@ module.exports = {
   newTorSession: renewTorSession,
   renewTorSession: renewTorSession,
 
-  TorControlPort: TorControlPort
+  TorControlPort: TorControlPort,
 }
