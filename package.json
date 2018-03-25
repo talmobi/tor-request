@@ -4,8 +4,8 @@
   "description": "send https requests through Tor.",
   "main": "index.js",
   "dependencies": {
-    "request": "~2.67.0",
-    "socks": "~2.1.6"
+    "proxy-agent": "~2.2.0",
+    "request": "~2.67.0"
   },
   "devDependencies": {
     "mocha": "~2.3.4"

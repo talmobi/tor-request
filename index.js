@@ -1,6 +1,6 @@
 var libs = {
   // communicate with SOCKS (protocol used by tor) over nodejs
-  Socks: require('socks'),
+  ProxyAgent: require( 'proxy-agent' ),
 
   // better HTTP for nodejs
   request: require('request'),
@@ -29,15 +29,31 @@ var default_proxy_settings = createProxySettings("localhost", 9050);
 /* helper function to create a SOCKS agent to be used in the request library
  * */
 function createAgent (url) {
-  var proxy_setup = createProxySettings();
+  var ps = createProxySettings();
 
-  var isHttps = url.indexOf('https://') >= 0;
+  var protocol = 'socks://'
 
-  var socksAgent = new libs.Socks.Agent({
-      proxy: proxy_setup,
-    },
-    isHttps, // https
-    false // rejectUnauthorized option passed to tls.connect().
+  switch ( String( ps.type ) ) {
+    case '4':
+      protocol = 'socks4://'
+      break
+
+    default:
+      'socks://' // defaults to v5
+  }
+
+  var proxyUri = protocol + ps.ipaddress + ':' + ps.port
+
+  // other available protocols, see: https://www.npmjs.com/package/proxy-agent
+  // http             http://
+  // https            https://
+  // socks(v5)        socks://
+  // socks5           socks5://
+  // socks4           socks4://
+  // pac              pac+http://
+
+  var socksAgent = libs.ProxyAgent(
+    proxyUri
   );
 
   return socksAgent;
