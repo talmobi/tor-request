@@ -48,6 +48,13 @@ On **Debian** you can install and run a relatively up to date Tor with.
 apt-get install tor # should auto run as daemon after install
 ```
 
+**Misc Linux Command for running Tor as daemon**
+`--RunAsDaemon 0`
+**thanks @knoxcard**
+```
+/usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc -f /etc/tor/torrc --RunAsDaemon 0
+```
+
 On **OSX** you can install with homebrew
 
 ```bash
@@ -144,6 +151,17 @@ module.exports = {
   newTorSession: function ( done(err) ) // clears and renews the Tor session (i.e., you get a new IP)
   
 }
+```
+
+## Custom headers
+https://github.com/talmobi/tor-request/issues/13
+
+Refer to the https://github.com/request/request#custom-http-headers to specify your own headers ( like User-Agent ).
+
+basically:
+
+```js
+tr.request({ url: 'google.com', headers: { 'user-agent': 'giraffe' }}, function ( err, response, body ) { /*...*/ })
 ```
 
 ## Test
