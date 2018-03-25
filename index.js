@@ -83,7 +83,7 @@ torRequest.del = verbFunc('del')
 torRequest.jar = libs.request.jar;
 torRequest.cookie = libs.request.cookie;
 torRequest.defaults = function () {
-	let lib = require('request');
+	var lib = require('request');
 	libs.request = lib.defaults.apply(lib, arguments);
 	libs.request.initParams = lib.initParams;
 	return torRequest;
