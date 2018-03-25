@@ -39,7 +39,7 @@ function createAgent (url) {
       break
 
     default:
-      'socks://' // defaults to v5
+      protocol = 'socks://' // defaults to v5
   }
 
   var proxyUri = protocol + ps.ipaddress + ':' + ps.port
