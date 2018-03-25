@@ -1,16 +1,19 @@
 {
   "name": "tor-request",
   "version": "1.1.1",
-  "description": "send https requests through Tor.",
+  "description": "send http/https requests through Tor.",
   "main": "index.js",
   "dependencies": {
     "request": "~2.67.0",
-    "socks": "~1.1.8"
+    "socks-proxy-agent": "~3.0.1"
   },
   "devDependencies": {
-    "mocha": "~2.3.4"
+    "mocha": "~2.3.4",
+    "spacestandard": "~0.2.0"
   },
   "scripts": {
+    "lint": "spacestandard index.js",
+    "fixlint": "spacestandard --fix index.js",
     "test": "mocha test/test.js",
     "test-all": "npm run test-control-port && npm run test",
     "test-control-port": "mocha test/test-control-port.js"
