@@ -21,6 +21,11 @@ function createProxySettings ( ipaddress, port, type )
     port: port || dps.port || 9050, // tor port
     type: type || dps.type || 5
   }
+
+  if ( proxySetup.ipaddress === 'localhost' ) {
+    proxySetup.ipaddress = '127.0.0.1'
+  }
+
   return proxySetup
 }
 
