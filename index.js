@@ -1,6 +1,6 @@
 var libs = {
   // communicate with SOCKS (protocol used by tor) over nodejs
-  ProxyAgent: require( 'proxy-agent' ),
+  SocksProxyAgent: require( 'socks-proxy-agent' ),
 
   // better HTTP for nodejs
   request: require('request'),
@@ -52,7 +52,7 @@ function createAgent (url) {
   // socks4           socks4://
   // pac              pac+http://
 
-  var socksAgent = libs.ProxyAgent(
+  var socksAgent = libs.SocksProxyAgent(
     proxyUri
   );
 
