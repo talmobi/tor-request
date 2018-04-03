@@ -112,7 +112,6 @@ function getTorrcLocation () {
       )
 
       try {
-        console.log( 'attempting: ' + p )
         var exists = _fs.existsSync( p )
         if ( exists ) {
           return paths[ i ] + ' ?'
