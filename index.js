@@ -124,7 +124,7 @@ function getTorrcLocation () {
     }
   }
 
-  return 'did not find torrc file'
+  return 'torrc not found, specify with `tor --default-torrc <PATH>`'
 }
 
 // set default proxy settings
