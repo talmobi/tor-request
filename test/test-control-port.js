@@ -1,6 +1,12 @@
 var tr = require('../index.js');
 var request = require('request');
 
+// add these to your torrc file ( tor --default-torrc PATH )
+//  ControlPort 9051
+//  HashedControlPassword $(tor --hash-password my_secret_giraffe_password)
+tr.TorControlPort.port = 9051
+tr.TorControlPort.password = 'my_secret_giraffe_password';
+
 var url = "http://api.ipify.org"; // this api returns your ip in the respnose body
 var httpsUrl = "https://api.ipify.org";
 
