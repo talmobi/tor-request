@@ -29,6 +29,114 @@ function createProxySettings ( ipaddress, port, type )
   return proxySetup
 }
 
+function attachCommonErrorDetails ( err )
+{
+  // https://github.com/talmobi/tor-request/issues/3
+  // https://github.com/talmobi/tor-request/issues/11
+  // https://github.com/talmobi/tor-request/issues/20
+  // https://github.com/talmobi/tor-request/issues/5
+
+  if ( !err ) return
+  if ( typeof err.message !== 'string' ) return
+
+  if (
+    ( err.message.indexOf( 'ECONNREFUSED' ) >= 0 ) ||
+    ( err.message.toLowerCase() === 'socket closed' )
+  ) {
+    var attachment = (
+      '\n - Are you running `tor`?' +
+      '\nSee easy guide here (OSX, Linux, Windows):' +
+      '\nhttps://github.com/talmobi/tor-request#requirements' +
+      '\n\n Quickfixes:' +
+      '\n  OSX: `brew install tor && tor`         # installs and runs tor' +
+      '\n  Debian/Ubuntu: `apt-get install tor`   # should auto run as daemon after install' +
+      '\n'
+    )
+
+    // only attach once
+    if ( err.message.indexOf( attachment ) === -1 ) {
+      err.message = (
+        err.message + attachment
+      )
+    }
+  }
+}
+
+function attachCommonControlPortErrorDetails ( err )
+{
+  // https://github.com/talmobi/tor-request/issues/1
+
+  if ( !err ) return
+  if ( typeof err.message !== 'string' ) return
+
+  // if ( err.code === 'ECONNREFUSED' ) {
+  if ( err ) {
+    var attachment = (
+      ' - Have you enabled the ControlPort in your `torrc` file? (' + getTorrcLocation() + ')' +
+      '\n\nSee easy guide here (OSX, Linux, Windows):' +
+      '\nhttps://github.com/talmobi/tor-request#optional-configuring-tor-enabling-the-controlport' +
+      '\n\n Sample torrc file:' +
+      '\n     ControlPort 9051' +
+      '\n     HashedControlPassword 16:AEBC98A67.....E81DF' +
+      '\n' +
+      '\n   Generate HashedControlPassword with (last output line):' +
+      '\n     `tor --hash-password my_secret_password`' +
+      '\n' +
+      '\n   Tell tor-request the password to use:' +
+      '\n     `require( "tor-request" ).TorControlPort.password = "my_secret_password"`' +
+      '\n' +
+      '\n'
+    )
+
+    // only attach once
+    if ( err.message.indexOf( attachment ) === -1 ) {
+      err.message = (
+        err.message + attachment
+      )
+    }
+  }
+}
+
+function getTorrcLocation ()
+{
+  var _fs = require( 'fs' )
+  var _path = require( 'path' )
+
+  var suffixes = [
+    '',
+    '.sample'
+  ]
+
+  var paths = [
+    '/usr/local/etc/tor/torrc',
+    '/tor/etc/tor/torrc',
+    '/etc/tor/torrc',
+    '/lib/etc/tor/torrc',
+    '~/.torrc',
+    '~/Library/Application Support/TorBrowser-Data/torrc',
+  ]
+
+  for ( var i = 0; i < paths.length; i++ ) {
+    for ( var j = 0; j < suffixes.length; j++ ) {
+      var p = _path.resolve(
+        ( paths[ i ] + suffixes[ j ] )
+        .split( '~' ).join( require( 'os' ).homedir() )
+      )
+
+      try {
+        var exists = _fs.existsSync( p )
+        if ( exists ) {
+          return paths[ i ] + ' ?'
+        }
+      } catch ( err ) {
+        /* ignore */
+      }
+    }
+  }
+
+  return 'torrc not found, specify with `tor --default-torrc <PATH>`'
+}
+
 // set default proxy settings
 var _defaultProxySettings = createProxySettings( 'localhost', 9050 )
 
@@ -72,6 +180,12 @@ function createAgent ( url )
 function torRequest ( uri, options, callback )
 {
   var params = libs.request.initParams( uri, options, callback )
+
+  var _callback = params.callback
+  params.callback = function ( err, res, body ) {
+    _callback( err, res, body )
+  }
+
   params.agent = createAgent( params.uri || params.url )
 
   return libs.request( params, function ( err, res, body ) {
@@ -81,6 +195,9 @@ function torRequest ( uri, options, callback )
     if ( agent && agent.encryptedSocket ) {
       agent.encryptedSocket.end()
     }
+
+    // detect common error where tor is not installed or running
+    attachCommonErrorDetails( err )
 
     params.callback( err, res, body )
   } )
@@ -136,12 +253,13 @@ var TorControlPort = {
       host: TorControlPort.host || 'localhost',
       port: TorControlPort.port || 9051 // default Tor ControlPort
     }, function () {
-      // console.log('connected to ControlPort!');
       var commandString = commands.join( '\n' ) + '\n'
       socket.write( commandString )
     } )
 
     socket.on( 'error', function ( err ) {
+      attachCommonControlPortErrorDetails( err )
+
       done( err || 'ControlPort communication error' )
     } )
 
@@ -151,7 +269,6 @@ var TorControlPort = {
     } )
 
     socket.on( 'end', function () {
-      // console.log('disconncted from ControlPort');
       done( null, data )
     } )
   }
@@ -172,6 +289,7 @@ function renewTorSession ( done )
 
   TorControlPort.send( commands, function ( err, data ) {
     if ( err ) {
+      attachCommonControlPortErrorDetails( err )
       done( err )
     } else {
       var lines = data.split( os.EOL ).slice( 0, -1 )
@@ -182,7 +300,9 @@ function renewTorSession ( done )
       } )
 
       if ( !success ) {
-        done( new Error( 'Error communicating with Tor ControlPort\n' + data ) )
+        var err = new Error( 'Error communicating with Tor ControlPort\n' + data )
+        attachCommonControlPortErrorDetails( err )
+        done( err )
       } else {
         done( null, 'Tor session successfully renewed!!' )
       }
