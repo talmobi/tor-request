@@ -17,11 +17,12 @@ function createProxySettings ( ipaddress, port, type )
 {
   var dps = _defaultProxySettings || {}
   var proxySetup = {
-    ipaddress: ipaddress || dps.ipaddress || 'localhost', // tor address
+    ipaddress: ipaddress || dps.ipaddress || '127.0.0.1', // tor address
     port: port || dps.port || 9050, // tor port
     type: type || dps.type || 5
   }
 
+  // common usage
   if ( proxySetup.ipaddress === 'localhost' ) {
     proxySetup.ipaddress = '127.0.0.1'
   }
