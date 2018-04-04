@@ -59,8 +59,10 @@ On **OSX** you can install with homebrew
 
 ```bash
 brew install tor
-tor & # run as background process
+tor # run tor
 ```
+
+If you'd like to run it as a background process you can add `&` at the end of the command `tor &`. I like to have it running on a separate terminal window/tab/tmux/screen during development in order to see what's going on.
 
 On **Windows** download the tor expert bundle (not the browser), unzip it and run tor.exe.
 
