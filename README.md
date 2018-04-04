@@ -71,10 +71,10 @@ On **Windows** download the tor expert bundle (not the browser), unzip it and ru
 See [TorProject.org](https://www.torproject.org/docs/debian.html.en) for detailed installation guides for all platforms.
 
 
-The Tor client by default runs on port 9050 (localhost of course). This is also the default address tor-request uses. You can change it if needed.
+The Tor client by default runs on port 9050. This is also the default address tor-request uses. You can change it if needed.
 
 ```js
-tr.setTorAddress(ipaddress, port); // "localhost" and 9050 by default
+tr.setTorAddress(ipaddress, port); // "127.0.0.1" and 9050 by default
 ```
 
 ## (Optional) Configuring Tor, enabling the ControlPort
@@ -123,17 +123,17 @@ module.exports = {
   request: function (url || opts, function (err, res, body))
   
   /**
-   * @param {string} ipaddress - ip address of tor server (localhost by default)
+   * @param {string} ipaddress - ip address of tor server ("127.0.0.1" by default)
    * @param {number} port - port of the tor server (by default tor runs on port 9050)
    */
-  setTorAddress: function (ipaddress, port) // defaults to localhost on port 9050
+  setTorAddress: function (ipaddress, port) // defaults to "127.0.0.1" on port 9050
   
   /**
    * Helper object to communicate with the tor ControlPort. Requires an enabled ControlPort on tor.
    */
   TorControlPort: {
     password: "", // default ControlPort password
-    host: "localhost", // default address
+    host: "127.0.0.1", // default address
     port: 9051, // default ControlPort
     
     /**
