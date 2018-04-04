@@ -42,7 +42,7 @@ Either run it yourself locally (recommended) or specify the address for a public
 
 Tor is available for a multitude of systems.
 
-On **Debian** you can install and run a relatively up to date Tor with.
+On **Debian**/**Ubuntu** you can install and run a relatively up to date Tor with.
 
 ```bash
 apt-get install tor # should auto run as daemon after install
