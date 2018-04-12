@@ -49,10 +49,10 @@ apt-get install tor # should auto run as daemon after install
 ```
 
 **Misc Linux Command for running Tor as daemon**
-`--RunAsDaemon 0`
+`--RunAsDaemon 1`
 **thanks @knoxcard**
 ```
-/usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc -f /etc/tor/torrc --RunAsDaemon 0
+/usr/bin/tor --RunAsDaemon 1
 ```
 
 On **OSX** you can install with homebrew
