@@ -4,7 +4,7 @@
   "description": "send http/https requests through Tor.",
   "main": "index.js",
   "dependencies": {
-    "socks-proxy-agent": "4.0.1",
+    "socks-proxy-agent": "~4.0.1",
     "request": "~2.85.0"
   },
   "devDependencies": {
