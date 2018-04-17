@@ -4,7 +4,7 @@
   "description": "send http/https requests through Tor.",
   "main": "index.js",
   "dependencies": {
-    "@talmobi/socks-proxy-agent": "~3.0.2",
+    "socks-proxy-agent": "~4.0.1",
     "request": "~2.85.0"
   },
   "devDependencies": {
