@@ -1,6 +1,6 @@
 var libs = {
   // communicate with SOCKS (protocol used by tor) over nodejs
-  SocksProxyAgent: require( '@talmobi/socks-proxy-agent' ),
+  SocksProxyAgent: require( 'socks-proxy-agent' ),
 
   // better HTTP for nodejs
   request: require( 'request' )
