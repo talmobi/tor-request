@@ -94,5 +94,5 @@ app.get('/api/requestNewTorSession', function (req, res) {
 var port = 3366
 var server = require('http').createServer(app)
 server.listen(port, function () {
-  console.log('server listneing on port *:' + port)
+  console.log('Server listening on port *:' + port)
 })
