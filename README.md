@@ -166,6 +166,12 @@ basically:
 tr.request({ url: 'google.com', headers: { 'user-agent': 'giraffe' }}, function ( err, response, body ) { /*...*/ })
 ```
 
+## Request Pipe Streaming
+   ```request = require('request')
+      request.proxy = 'http://127.0.0.1:9050'
+      request('http://google.com/doodle.png').pipe(fs.createWriteStream('doodle.png'))
+  ```
+      
 ## Test
 
 Tests the original request library by connecting to http://api.ipify.org - returning your ip. Then makes a few additional requests, now through tor-request, and makes sure the ip's are different (went through tor).
