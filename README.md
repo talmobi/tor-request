@@ -169,7 +169,8 @@ tr.request({ url: 'google.com', headers: { 'user-agent': 'giraffe' }}, function 
 ## Request Pipe Streaming
    ```request = require('request')
       request.proxy = 'http://127.0.0.1:9050'
-      request('http://google.com/doodle.png').pipe(fs.createWriteStream('doodle.png'))```
+      request('http://google.com/doodle.png').pipe(fs.createWriteStream('doodle.png'))
+  ```
       
 ## Test
 
