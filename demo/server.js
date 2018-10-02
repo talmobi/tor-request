@@ -7,7 +7,6 @@ var tr = require('../index.js')
 var ipservices = [
   'http://icanhazip.com',
   'http://ifconfig.me/ip',
-  'http://ifconfig.me',
   'https://api.ipify.org',
   'http://ip.appspot.com',
   'http://ip-spot.com',
