@@ -169,7 +169,7 @@ tr.request({ url: 'google.com', headers: { 'user-agent': 'giraffe' }}, function 
 ## Request Pipe Streaming
    ```
    request({
-    url: 'https://encrypted.google.com/',
+    url: 'https://www.google.com.np/images/srpr/logo11w.png',
     strictSSL: true,
     agentClass: require('socks5-https-client/lib/Agent'),
     agentOptions: {
