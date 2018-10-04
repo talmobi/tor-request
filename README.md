@@ -167,9 +167,21 @@ tr.request({ url: 'google.com', headers: { 'user-agent': 'giraffe' }}, function 
 ```
 
 ## Request Pipe Streaming
-   ```request = require('request')
-      request.proxy = 'http://127.0.0.1:9050'
-      request('http://google.com/doodle.png').pipe(fs.createWriteStream('doodle.png'))
+   ```
+   request({
+    url: 'https://encrypted.google.com/',
+    strictSSL: true,
+    agentClass: require('socks5-https-client/lib/Agent'),
+    agentOptions: {
+      socksHost: 'my-tor-proxy-host', // Defaults to 'localhost'.
+      socksPort: 9050, // Defaults to 1080.
+      // Optional credentials
+      socksUsername: 'proxyuser',
+      socksPassword: 'p@ssw0rd',
+    }
+  }, function(err, res) {
+    console.log(err || res.body);
+  }).pipe(fs.createWriteStream('doodle.png'))
   ```
       
 ## Test
