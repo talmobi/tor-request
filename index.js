@@ -311,11 +311,14 @@ function renewTorSession ( done )
   } )
 }
 
-module.exports = {
-  setTorAddress: function ( ipaddress, port ) {
+const api = {
+  setTorAddress: function ( ipaddress, port, type ) {
     // update the default proxy settings
-    _defaultProxySettings = createProxySettings( ipaddress, port )
+    _defaultProxySettings = createProxySettings( ipaddress, port, type )
+    api.proxySettings = _defaultProxySettings
   },
+
+  proxySettings: _defaultProxySettings,
 
   request: torRequest,
   torRequest: torRequest,
@@ -325,3 +328,5 @@ module.exports = {
 
   TorControlPort: TorControlPort
 }
+
+module.exports = api
