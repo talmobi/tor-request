@@ -19,7 +19,7 @@ function createProxySettings ( ipaddress, port, type )
   var proxySetup = {
     ipaddress: ipaddress || dps.ipaddress || '127.0.0.1', // tor address
     port: port || dps.port || 9050, // tor port
-    type: type || dps.type || 4
+    type: type || dps.type || 5
   }
 
   // common usage
