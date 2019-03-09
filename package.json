@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "request": "~2.88.0",
-    "socks": "~2.2.3",
     "socks-proxy-agent": "~4.0.1"
   },
   "devDependencies": {
