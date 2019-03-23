@@ -4,6 +4,8 @@ var request = require('request');
 var url = "http://api.ipify.org"; // this api returns your ip in the respnose body
 var httpsUrl = "https://api.ipify.org";
 
+var stream = require( 'stream' )
+
 describe('Testing request and tor-request against ' + url, function () {
   this.timeout(15000);
   var public_ip = "";
@@ -60,6 +62,29 @@ describe('Testing request and tor-request against ' + url, function () {
           done();
         } )
       });
+    });
+  });
+
+  describe('test stream pipe (no callback) tor-request', function () {
+    it('should return without error', function (done) {
+      var ws = stream.Writable()
+
+      var chunks = []
+      ws._write = function ( chunk, enc, next ) {
+        chunks.push( chunk )
+        next()
+      }
+
+      ws.end = function () {
+        // console.log( chunks )
+        const body = Buffer.concat( chunks ).toString( 'utf8' )
+        if (body == public_ip) throw err || new Error("request didn't go through tor - the tor ip and pulic ip were the same.");
+        console.log("The Stream pipe requests public ip was: " + body);
+        done();
+      }
+
+      tr.request(url)
+      .pipe( ws )
     });
   });
 
