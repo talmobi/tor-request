@@ -55,7 +55,7 @@ describe('Testing request and tor-request against ' + url, function () {
         } )
 
         res.on( 'end', function () {
-          console.log( chunks )
+          // console.log( chunks )
           const body = Buffer.concat( chunks ).toString( 'utf8' )
           if (body == public_ip) throw err || new Error("request didn't go through tor - the tor ip and pulic ip were the same.");
           console.log("The Stream API requests public ip was: " + body);
