@@ -195,7 +195,7 @@ function torRequest ( uri, options, callback )
     // detect common error where tor is not installed or running
     attachCommonErrorDetails( err )
 
-    params.callback( err, res, body )
+    if ( params.callback ) params.callback( err, res, body )
   } )
 }
 
