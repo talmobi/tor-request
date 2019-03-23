@@ -182,11 +182,6 @@ function torRequest ( uri, options, callback )
 {
   var params = libs.request.initParams( uri, options, callback )
 
-  var _callback = params.callback
-  params.callback = function ( err, res, body ) {
-    _callback( err, res, body )
-  }
-
   params.agent = createAgent( params.uri || params.url )
 
   return libs.request( params, function ( err, res, body ) {
