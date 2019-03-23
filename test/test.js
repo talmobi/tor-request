@@ -42,6 +42,27 @@ describe('Testing request and tor-request against ' + url, function () {
     });
   });
 
+  describe('test stream (no callback) tor-request', function () {
+    it('should return without error', function (done) {
+      tr.request(url)
+      .on( 'response', function ( res ) {
+        var chunks = []
+
+        res.on( 'data', function ( chunk ) {
+          chunks.push( chunk )
+        } )
+
+        res.on( 'end', function () {
+          console.log( chunks )
+          const body = Buffer.concat( chunks ).toString( 'utf8' )
+          if (body == public_ip) throw err || new Error("request didn't go through tor - the tor ip and pulic ip were the same.");
+          console.log("The Stream API requests public ip was: " + body);
+          done();
+        } )
+      });
+    });
+  });
+
   /**
    * Test http bindings between request and tor-request
    */
