@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "request": "~2.88.0",
-    "socks-proxy-agent": "~4.0.1"
+    "socks-proxy-agent": "~4.0.2"
   },
   "devDependencies": {
     "mocha": "~5.2.0",
