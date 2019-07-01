@@ -114,7 +114,7 @@ function getTorrcLocation ()
     '/etc/tor/torrc',
     '/lib/etc/tor/torrc',
     '~/.torrc',
-    '~/Library/Application Support/TorBrowser-Data/torrc',
+    '~/Library/Application Support/TorBrowser-Data/torrc'
   ]
 
   for ( var i = 0; i < paths.length; i++ ) {
@@ -296,9 +296,9 @@ function renewTorSession ( done )
       } )
 
       if ( !success ) {
-        var err = new Error( 'Error communicating with Tor ControlPort\n' + data )
-        attachCommonControlPortErrorDetails( err )
-        done( err )
+        var comerr = new Error( 'Error communicating with Tor ControlPort\n' + data )
+        attachCommonControlPortErrorDetails( comerr )
+        done( comerr )
       } else {
         done( null, 'Tor session successfully renewed!!' )
       }
