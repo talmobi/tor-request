@@ -38,9 +38,7 @@ npm install
 ## Requirements
 A Tor client.
 
-Either run it yourself locally (recommended) or specify the address for a publically available one.
-
-Tor is available for a multitude of systems.
+It's highly recommended you run the official client yourself, either locally or otherwise. Tor is available for most systems often just a quick one-line install away.
 
 On **Debian**/**Ubuntu** you can install and run a relatively up to date Tor with.
 
