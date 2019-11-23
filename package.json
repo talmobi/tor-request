@@ -8,7 +8,7 @@
     "socks-proxy-agent": "~4.0.2"
   },
   "devDependencies": {
-    "mocha": "~5.2.0",
+    "mocha": "~6.2.2",
     "spacestandard": "~0.2.0"
   },
   "scripts": {
