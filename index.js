@@ -287,23 +287,22 @@ function renewTorSession ( done )
     if ( err ) {
       attachCommonControlPortErrorDetails( err )
       done( err )
-    } else {
-      var lines = data.split( os.EOL ).slice( 0, -1 )
-
-      var success = lines.every( function ( val, ind, arr ) {
-        // each response from the ControlPort should start with 250 (OK STATUS)
-        return val.length <= 0 || val.indexOf( '250' ) >= 0
-      } )
-
-      if ( !success ) {
-        var comerr = new Error( 'Error communicating with Tor ControlPort\n' + data )
-        attachCommonControlPortErrorDetails( comerr )
-        done( comerr )
-      } else {
-        done( null, 'Tor session successfully renewed!!' )
-      }
+      return
     }
-  } )
+    var lines = data.split( os.EOL ).slice( 0, -1 ),
+    success = lines.every( function ( val, ind, arr ) {
+      // each response from the ControlPort should start with 250 (OK STATUS)
+      return val.length <= 0 || val.indexOf( '250' ) >= 0
+    } )
+
+    if ( !success ) {
+      var comerr = new Error( 'Error communicating with Tor ControlPort\n' + data )
+      attachCommonControlPortErrorDetails( comerr )
+      done( comerr )
+      return
+    }
+    done( null, 'Tor session successfully renewed!!' )
+  }
 }
 
 const api = {
