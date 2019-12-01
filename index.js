@@ -289,7 +289,9 @@ function renewTorSession ( done )
       done( err )
       return
     }
-    var lines = data.split( os.EOL ).slice( 0, -1 ),
+
+    var lines = data.split( os.EOL ).slice( 0, -1 )
+
     success = lines.every( function ( val, ind, arr ) {
       // each response from the ControlPort should start with 250 (OK STATUS)
       return val.length <= 0 || val.indexOf( '250' ) >= 0
@@ -301,8 +303,9 @@ function renewTorSession ( done )
       done( comerr )
       return
     }
+
     done( null, 'Tor session successfully renewed!!' )
-  }
+  } )
 }
 
 const api = {
