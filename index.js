@@ -303,8 +303,9 @@ function renewTorSession ( done )
       done( comerr )
       return
     }
+
     done( null, 'Tor session successfully renewed!!' )
-  }
+  } )
 }
 
 const api = {
