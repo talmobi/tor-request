@@ -45,6 +45,8 @@ function attachCommonErrorDetails ( err )
     ( err.message.toLowerCase() === 'socket closed' )
   ) {
     var attachment = (
+      '\n' +
+      '\n' +
       '\n - Are you running `tor`?' +
       '\nSee easy guide here (OSX, Linux, Windows):' +
       '\nhttps://github.com/talmobi/tor-request#requirements' +
