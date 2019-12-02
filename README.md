@@ -62,7 +62,9 @@ tor # run tor
 
 If you'd like to run it as a background process you can add `&` at the end of the command `tor &`. I like to have it running on a separate terminal window/tab/tmux/screen during development in order to see what's going on.
 
-On **Windows** download the tor expert bundle (not the browser), unzip it and run tor.exe.
+On **Windows** download the tor expert bundle (not the browser), unzip it and run `tor.exe` inside the Tor/ directory.
+
+download link: [Windows Expert Bundle](https://www.torproject.org/download/tor/)
 
 ```bash
 ./Tor/tor.exe # --default-torrc PATH_TO_TORRC
