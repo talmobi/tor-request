@@ -51,6 +51,9 @@ function attachCommonErrorDetails ( err )
       '\n\n Quickfixes:' +
       '\n  OSX: `brew install tor && tor`         # installs and runs tor' +
       '\n  Debian/Ubuntu: `apt-get install tor`   # should auto run as daemon after install' +
+      '\n  Windows: download the Windows Expert Bundle from `https://www.torproject.org/download/tor/`' +
+      '\n           Unzip and run tor.exe inside the Tor/ directory.' +
+      '\n' +
       '\n'
     )
 
