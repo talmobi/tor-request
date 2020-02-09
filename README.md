@@ -43,7 +43,7 @@ It's highly recommended you run the official client yourself, either locally or 
 On **Debian**/**Ubuntu** you can install and run a relatively up to date Tor with.
 
 ```bash
-apt-get install tor # should auto run as daemon after install
+apt install tor # should auto run as daemon after install
 ```
 
 **Misc Linux Command for running Tor as daemon**
