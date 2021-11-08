@@ -309,7 +309,7 @@ function renewTorSession ( done )
       return
     }
 
-    done( null, 'Tor session successfully renewed!!' )
+    return 'Tor session successfully renewed.'
   } )
 }
 
